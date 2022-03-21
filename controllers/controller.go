@@ -33,7 +33,7 @@ func FindStudentById(c *gin.Context) {
 func Greeting(c *gin.Context) {
 	name := c.Params.ByName("name")
 	c.JSON(200, gin.H{
-		"API diz": "E aí " + name + ", tudo beleza?",
+		"API says": "Hey " + name + ", what's up?",
 	})
 }
 
@@ -64,7 +64,7 @@ func DeleteStudent(c *gin.Context) {
 	database.DB.Delete(&student, id)
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": "Student deletado com sucesso",
+		"data": "Student successfully deleted",
 	})
 }
 
