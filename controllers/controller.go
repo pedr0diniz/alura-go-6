@@ -46,6 +46,13 @@ func CreateStudent(c *gin.Context) {
 		return
 	}
 
+	if err := models.ValidateStudentData(&student); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	database.DB.Create(&student)
 	c.JSON(http.StatusOK, student)
 }
@@ -87,6 +94,13 @@ func EditStudent(c *gin.Context) {
 		return
 	}
 
+	if err := models.ValidateStudentData(&student); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	database.DB.Model(&student).UpdateColumns(student)
 
 	c.JSON(http.StatusOK, student)
@@ -105,4 +119,17 @@ func FindStudentByCpf(c *gin.Context) {
 	}
 
 	c.JSON(200, student)
+}
+
+func ShowIndexPage(c *gin.Context) {
+	var students []models.Student
+	database.DB.Find(&students)
+
+	c.HTML(http.StatusOK, "index.html", gin.H{
+		"students": students,
+	})
+}
+
+func RouteNotFound(c *gin.Context) {
+	c.HTML(http.StatusNotFound, "404.html", nil)
 }
